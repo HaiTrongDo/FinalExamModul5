@@ -1,43 +1,61 @@
-import  {useState, useEffect} from 'react';
-
+import {useState, useEffect} from 'react';
+import {useNavigate} from "react-router-dom";
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
-const AllProducts = async () => {
+const AllProducts = () => {
+    let navigate = useNavigate();
     const [products, setProducts] = useState([]);
-    // console.log(products);
 
 
-    useEffect(async () => {
-     const data = await  axios.get("http://localhost:3001/products")
-        console.log(data)
-    }, []);
+
+    useEffect(() => {
+        async function fetData() {
+            const data = await axios.get("http://localhost:3001/products")
+            setProducts(data.data)
+        }
+
+        fetData()
+    }, [products]);
 
     return (
         <div>
-            {/*<table className="table">*/}
-            {/*    <thead>*/}
-            {/*    <tr>*/}
-            {/*        <th scope="col">#</th>*/}
-            {/*        <th scope="col">First</th>*/}
-            {/*        <th scope="col">Last</th>*/}
-            {/*        <th scope="col">Handle</th>*/}
-            {/*    </tr>*/}
-            {/*    </thead>*/}
-            {/*    <tbody>*/}
-            {/*    {*/}
-            {/*        products.map((product,index) => (*/}
-            {/*            <tr key={index}>*/}
-            {/*                <td>{product.id}</td>*/}
-            {/*                <td>{product.name}</td>*/}
-            {/*                <td>{product.price}</td>*/}
-            {/*                <td>{product.stock}</td>*/}
-            {/*                <td>{product.description}</td>*/}
-            {/*            </tr>*/}
-            {/*        ))*/}
-            {/*    }*/}
-
-            {/*    </tbody>*/}
-            {/*</table>*/}
+            <h1>Products List </h1>
+            <button className="btn btn-primary" onClick={() => {
+                navigate('/add-new-product')
+            }}> Add New Product
+            </button>
+            <table className="table">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Stock</th>
+                </tr>
+                </thead>
+                <tbody>
+                {products.map((product, index) => (
+                        <tr key={index}>
+                            <td>{product.id}</td>
+                            <td>
+                                <Link to={`/products/${product.id}`}
+                                >{product.name} </Link></td>
+                            <td>{product.price}</td>
+                            <td>{product.stock}</td>
+                            <td>
+                                <button className="btn btn-info" onClick={() => {
+                                    navigate('/update-product/'+product.id)}}>Edit
+                                </button>
+                            </td>
+                            <td>
+                                <button className="btn btn-danger" onClick={()=>{navigate('/delete-product/'+product.id)}}>Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

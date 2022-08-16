@@ -1,25 +1,28 @@
-import logo from './logo.svg';
 import './App.css';
+import AllProducts from "./page/AllProducts";
+import {BrowserRouter , Routes , Route, useParams } from 'react-router-dom'
+import ProductsDetail from "./page/ProductsDetail";
+import AddProduct from "./page/AddProduct";
+import UpdateProduct from "./page/UpdateProduct";
+import DeleteProductById from "./page/DeleteProductById";
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <BrowserRouter>
+            <Routes>
+                <Route exact path='/' element={<AllProducts />} />
+                <Route path="/products/:id" element={<ProductsDetail />} />
+                <Route path="/delete-product/:id" element={<DeleteProductById />} />
+                <Route path="/update-product/:id" element={<UpdateProduct />} />
+                <Route path="/add-new-product" element={<AddProduct />} />
+
+            </Routes>
+        </BrowserRouter>
     </div>
   );
 }
-
 export default App;
+
+
